@@ -2,14 +2,10 @@
 
 pkgs.stdenv.mkDerivation rec {
   pname = "vantage";
-  version = "v1-nix";
+  version = "1.0.0";
 
-  src = pkgs.fetchFromGitHub {
-    owner = "niizam";
-    repo = "vantage";
-    rev = "main";
-    sha256 = "sha256-Hp5D5tU4TL/jpTnA/fPawOj4pL8TnQQiWaGM7HyP7L4=";
-  };
+  # IMPORTANT: Change this to ./. so it uses the files in YOUR repo
+  src = ./.; 
 
   nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -21,13 +17,10 @@ pkgs.stdenv.mkDerivation rec {
     bash
   ];
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
+  # We can remove the "phases" line; Nix handles this automatically
+  
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/applications
-    mkdir -p $out/share/pixmaps
-    mkdir -p $out/share/vantage/images
+    mkdir -p $out/bin $out/share/applications $out/share/pixmaps $out/share/vantage/images
 
     # 1. Install script
     cp vantage.sh $out/bin/vantage
@@ -52,10 +45,10 @@ Categories=Settings;HardwareSettings;Utility;
 Keywords=vantage;network;audio;input;
 EOF
 
-    # 4. Patch Shebangs
+    # 4. Patch Shebangs (Fixes #!/bin/bash for NixOS)
     patchShebangs $out/bin/vantage
 
-    # 5. Wrap the program
+    # 5. Wrap the program so it finds its dependencies
     wrapProgram $out/bin/vantage \
       --prefix PATH : ${pkgs.lib.makeBinPath [ 
         pkgs.zenity 
