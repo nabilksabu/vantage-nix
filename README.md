@@ -1,4 +1,4 @@
-````markdown
+
 # 💻 Lenovo Vantage for NixOS
 
 <p align="center">
