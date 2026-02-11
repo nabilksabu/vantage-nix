@@ -28,7 +28,7 @@ pkgs.stdenv.mkDerivation rec {
 
     # 2. Install icon and images
     cp icon.png $out/share/pixmaps/vantage.png
-    cp images/* $out/share/vantage/images/
+    cp Images/* $out/share/vantage/images/
 
     # 3. Create a Universal XDG Desktop Entry
     cat <<EOF > $out/share/applications/vantage.desktop
