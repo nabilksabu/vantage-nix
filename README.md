@@ -1,3 +1,4 @@
+````markdown
 # 💻 Lenovo Vantage for NixOS
 
 <p align="center">
@@ -11,7 +12,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/NixOS-Compatible-blue?logo=nixos&logoColor=white" />
   <img src="https://img.shields.io/badge/Linux-Supported-green?logo=linux" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+  <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" />
 </p>
 
 ---
@@ -123,7 +124,8 @@ This ensures the application functions correctly even on minimal NixOS installat
 
 ## 📜 License
 
-This project is licensed under the **MIT License**.
+This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.
+See the `LICENSE` file for full details.
 
 ---
 
