@@ -4,7 +4,7 @@ pkgs.stdenv.mkDerivation rec {
   pname = "vantage";
   version = "1.0.0";
 
-  # IMPORTANT: Change this to ./. so it uses the files in YOUR repo
+  # Uses the files in the same folder as this default.nix
   src = ./.; 
 
   nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -17,38 +17,39 @@ pkgs.stdenv.mkDerivation rec {
     bash
   ];
 
-  # We can remove the "phases" line; Nix handles this automatically
-  
   installPhase = ''
+    # Create all necessary directories in the Nix store
     mkdir -p $out/bin $out/share/applications $out/share/pixmaps $out/share/vantage/images
 
-    # 1. Install script
+    # 1. Install the executable script
     cp vantage.sh $out/bin/vantage
     chmod +x $out/bin/vantage
 
-    # 2. Install icon and images
+    # 2. Install the icon
     cp icon.png $out/share/pixmaps/vantage.png
-    cp Images/* $out/share/vantage/images/
 
-    # 3. Create a Universal XDG Desktop Entry
+    # 3. Install the UI Images (matching your 'Images' folder name)
+    # The /. syntax ensures all contents are copied correctly
+    cp -r Images/. $out/share/vantage/images/
+
+    # 4. Create the Desktop Entry for your app menu
     cat <<EOF > $out/share/applications/vantage.desktop
 [Desktop Entry]
 Version=1.0
 Type=Application
 Name=Vantage
-Comment=Vantage Management Tool
+Comment=Hardware and System Management Tool
 Exec=$out/bin/vantage
-Icon=$out/share/pixmaps/vantage.png
+Icon=vantage
 Terminal=false
-StartupNotify=true
 Categories=Settings;HardwareSettings;Utility;
 Keywords=vantage;network;audio;input;
 EOF
 
-    # 4. Patch Shebangs (Fixes #!/bin/bash for NixOS)
+    # 5. Fix script shebangs for the Nix store environment
     patchShebangs $out/bin/vantage
 
-    # 5. Wrap the program so it finds its dependencies
+    # 6. Wrap the program so it knows exactly where its dependencies are
     wrapProgram $out/bin/vantage \
       --prefix PATH : ${pkgs.lib.makeBinPath [ 
         pkgs.zenity 
@@ -57,4 +58,11 @@ EOF
         pkgs.pulseaudio 
       ]}
   '';
+
+  meta = with pkgs.lib; {
+    description = "A management tool for system settings";
+    homepage = "https://github.com/nabilksabu/vantage-nix";
+    license = licenses.mit;
+    platforms = platforms.linux;
+  };
 }
