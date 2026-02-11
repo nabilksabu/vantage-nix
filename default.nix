@@ -30,7 +30,7 @@ pkgs.stdenv.mkDerivation rec {
 
     # 3. Install the UI Images (matching your 'Images' folder name)
     # The /. syntax ensures all contents are copied correctly
-    cp -r Images/. $out/share/vantage/images/
+    cp -r images/. $out/share/vantage/images/
 
     # 4. Create the Desktop Entry for your app menu
     cat <<EOF > $out/share/applications/vantage.desktop
